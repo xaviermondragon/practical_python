@@ -6,12 +6,15 @@ import csv
 import sys
 
 def portfolio_cost(filename):
+    """
+        Computes the total cost (shares*price) of a portfolio file
+    """
+
     total_cost = 0.0
     with open(filename, 'rt') as file:
         rows = csv.reader(file)
         next(rows) # skip headers
         for row in rows:
-            #record = line.split(',')
             try:
                 no_shares = int(row[1])
                 price = float(row[2])
