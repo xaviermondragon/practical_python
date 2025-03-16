@@ -13,13 +13,18 @@ def read_portfolio(filename):
     portfolio = []
     with open(filename, 'rt') as file:
         rows = csv.reader(file)
-        stock_keys = next(rows) # skip headers
+        headers = next(rows) # skip headers
         for row in rows:
-            stock_vals = [row[0], int(row[1]), float(row[2])]
-            stock = dict(zip(stock_keys, stock_vals))
+            record = dict(zip(headers, row))
+            stock = {
+                'name': record['name'],
+                'shares': int(record['shares']),
+                'price': float(record['price'])
+            }
             portfolio.append(stock)
 
     return portfolio
+
 
 def read_prices(filename):
     """
@@ -28,13 +33,14 @@ def read_prices(filename):
     prices =  {}
     with open(filename, 'rt') as file:
         rows = csv.reader(file)
-        for row in rows:
+        for row_no, row in enumerate(rows, start=1):
             try:
                 prices[row[0]] = float(row[1])
             except IndexError:
-                print(f'Warning: The file {filename} has missing values.\n')
+                print(f'Warning: The file {filename} has missing values at row {row_no}.\n')
 
     return prices
+
 
 def make_report(portfolio, prices):
     """
@@ -50,22 +56,38 @@ def make_report(portfolio, prices):
         rows.append((name, shares, actual_price, gain))
     return rows
 
+
+def print_report(report):
+    """
+        Print a nicely formated table from a list of (name, shares, price, change)
+    """
+    headers = ('Name', 'Shares', 'Price', 'Change')
+    print('%10s %10s %10s %10s' % headers)
+    print(('-' * 10 + ' ') * len(headers))
+    for row in report:
+        # print('%10s %10d %10.2f %10.2f' % row)
+        print('%10s %10d' % row[0:2], f'{f'${row[2]:.2f}':>10s}', f'{row[3]:>10.2f}')
+
+def portfolio_report(portfolio_filename, prices_filename):
+    """
+        Make a stock report given portfolio and price data files.
+    """
+    portfolio = read_portfolio(portfolio_filename)
+    prices = read_prices(prices_filename)
+    report = make_report(portfolio, prices)
+    print_report(report)
+
 if len(sys.argv) == 3:
     portfolio_filename = sys.argv[1]
     prices_filename = sys.argv[2]
 else:
     portfolio_filename = 'Data/portfolio.csv'
     prices_filename = 'Data/prices.csv'
+    #portfolio_filename = input('Enter portfolio filename: ')
+    #prices_filename = input('Enter prices filename: ')
 
-# Read data files and create the report data
-portfolio = read_portfolio(portfolio_filename)
-prices = read_prices(prices_filename)
-report = make_report(portfolio, prices)
+portfolio_report(portfolio_filename, prices_filename)
 
-# Print a table showing info about the portfolio
-headers = ('Name', 'Shares', 'Price', 'Change')
-print('%10s %10s %10s %10s' % headers)
-print(('-' * 10 + ' ') * len(headers))
-for row in report:
-    #print('%10s %10d %10.2f %10.2f' % row)
-    print('%10s %10d' % row[0:2], f'{f'${row[2]:.2f}':>10s}', f'{row[3]:>10.2f}')
+
+
+
