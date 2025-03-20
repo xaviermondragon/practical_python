@@ -2,7 +2,6 @@
 #
 # Exercise 1.27
 
-import sys
 import report
 
 def portfolio_cost(filename):
@@ -12,10 +11,12 @@ def portfolio_cost(filename):
     portfolio = report.read_portfolio(filename)
     return sum([stock['shares'] * stock['price'] for stock in portfolio])
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    filename = input('Enter a portfolio filename: ')
+def main(argv):
+    if len(sys.argv) != 2:
+        raise SystemExit(f'Usage: {argv[0]} portfolio_filename')
+    cost = portfolio_cost(argv[1])
+    print('Total cost:', cost)
 
-cost = portfolio_cost(filename)
-print('Total cost:', cost)
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)

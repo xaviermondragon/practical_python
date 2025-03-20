@@ -2,8 +2,6 @@
 #
 # Exercise 2.4
 
-import csv
-import sys
 import fileparse
 
 def read_portfolio(filename):
@@ -56,17 +54,12 @@ def portfolio_report(portfolio_filename, prices_filename):
     report = make_report(portfolio, prices)
     print_report(report)
 
-if len(sys.argv) == 3:
-    portfolio_filename = sys.argv[1]
-    prices_filename = sys.argv[2]
-else:
-    portfolio_filename = 'Data/portfolio.csv'
-    prices_filename = 'Data/prices.csv'
-    #portfolio_filename = input('Enter portfolio filename: ')
-    #prices_filename = input('Enter prices filename: ')
-
-portfolio_report(portfolio_filename, prices_filename)
+def main(argv):
+    if len(argv) != 3:
+        raise SystemExit(f'Usage: {argv[0]} portfolio_filename price_filename')
+    portfolio_report(argv[1], argv[2])
 
 
-
-
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
