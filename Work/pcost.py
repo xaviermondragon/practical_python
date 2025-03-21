@@ -9,7 +9,7 @@ def portfolio_cost(filename):
         Computes the total cost (shares*price) of a portfolio file
     """
     portfolio = report.read_portfolio(filename)
-    return sum([stock['shares'] * stock['price'] for stock in portfolio])
+    return sum([stock.cost() for stock in portfolio])
 
 def main(argv):
     if len(sys.argv) != 2:
