@@ -7,8 +7,8 @@ import tableformat
 
 def read_portfolio(filename):
     """
-    Read a stock portfolio file into a list of dictionaries with keys
-    name, shares, and price.
+    Read a stock portfolio file into a list of stock objects, each with
+    name, shares, and price fields
     """
     with open(filename) as file:
         port_dicts = fileparse.parse_csv(file, select=['name','shares','price'], types=[str,int,float])

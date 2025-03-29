@@ -15,6 +15,11 @@ def follow(filename):
             continue
         yield line
 
+def filematch(lines, substr):
+    for line in lines:
+        if substr in line:
+            yield line
+
 if __name__ == '__main__':
     import report
 
