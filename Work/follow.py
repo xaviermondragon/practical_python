@@ -15,7 +15,7 @@ def follow(filename):
             continue
         yield line
 
-def filematch(lines, substr):
+def E(lines, substr):
     for line in lines:
         if substr in line:
             yield line
